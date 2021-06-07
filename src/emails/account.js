@@ -24,10 +24,3 @@ const sendAccountDeleteMail=(email,name)=>{
 module.exports={
     sendWelcomeMail,sendAccountDeleteMail
 }
-
-// sgMail.send({
-//     to:'mathurpriyanshu2890@gmail.com',
-//     from:'rohitkv090@gmail.com',
-//     subject:'Test Email',
-//     text:'Hello this a test email from rohit'
-// }).then(()=>{console.log('Email Sent')}).catch((error)=>{console.log(error)});

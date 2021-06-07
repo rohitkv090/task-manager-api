@@ -4,8 +4,6 @@ const bycrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
 const Tasks=require('./tasks');
 
-
-
 const userSchema=new mongoose.Schema(
     {
         name:
@@ -32,10 +30,10 @@ const userSchema=new mongoose.Schema(
         password:{
             type:String,
             require:true,
-            trim:true,//we can also use minlenght property for checking the length of the password
+            trim:true,
             validate(value)
             {
-                if(value.length<6||value.toLowerCase()==="password")//we can also use value.include("password")
+                if(value.length<6||value.toLowerCase()==="password")
                     throw new Error ('Passoword must be greater than 6 characters and not password')
             }
     
@@ -92,19 +90,15 @@ userSchema.methods.toJSON= function()
     
 }
 
-userSchema.virtual('tasks',{//this tasks name is the name of the field that we can define accordingly
-    ref:'tasks',//this is the name of the model we decaled in model file
-    localField:'_id',//user model field which is used for referece 
-    foreignField:'owner'//refrenced model field that we can access
+userSchema.virtual('tasks',{
+    ref:'tasks',
+    localField:'_id', 
+    foreignField:'owner'
 })
 
-
-
-
-//hashing the passowrd
 userSchema.pre('save',async function(next){
     
-    const user=this;//user that is about to be save;
+    const user=this;
 
     if(user.isModified('password'))
     {
@@ -114,8 +108,6 @@ userSchema.pre('save',async function(next){
 
     next();
 })
-
-//delete user tasks when user is deleted
 
 
 userSchema.pre('remove',async function(next){

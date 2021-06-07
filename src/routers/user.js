@@ -11,12 +11,6 @@ router.post('/users',async (req,res)=>{
 
     const user=new User(req.body)
 
-    // user.save().then((data)=>{
-    //     res.status(201).send(data);
-    // }).catch((error)=>{
-    //     res.status(400).send(error);
-    // });
-
     try {
         await user.save();
         console.log(user.email,user.name);
@@ -77,29 +71,6 @@ router.get('/users/me',auth,async(req,res)=>{
     res.send(req.user);
 
 })
-
-// router.get('/users/:id',async(req,res)=>{
-//     const _id=req.params.id;
-//     // User.findById(_id).then((data)=>{
-//     //     if(!data)
-//     //         return res.status(404).send();
-//     //     res.send(data);
-//     // }).catch((error)=>{
-//     //     res.send(error);
-//     // })
-
-    
-//     try{
-//         const user=await User.findById(_id);
-//         if(!user)
-//             return res.status(404).send('User not found');
-//         res.send(user)
-//     }
-//     catch(e)
-//     {
-//         res.status(500).send();
-//     }
-// })
 router.patch('/users/me',auth,async (req,res)=>{
 
     const updates=Object.keys(req.body);
@@ -112,9 +83,6 @@ router.patch('/users/me',auth,async (req,res)=>{
 
     try{
 
-        // const user=await User.findByIdAndUpdate(req.params.id,req.body,{new:true,runValidators:true});//new return new user after update we will not use this because it bypass some basic mongoose functionality ,so we will hard code it
-
-        // const user=await User.findById(req.user._id); //don't need this because we can access the user data from auth function
         updates.forEach((update)=>{
             req.user[update]=req.body[update]
         });
@@ -132,13 +100,7 @@ router.patch('/users/me',auth,async (req,res)=>{
 
 router.delete('/users/me',auth,async(req,res)=>{
     try {
-
-        // const user=await User.findByIdAndDelete(req.user._id)//we users id from authentication as it is returning us the user 
-        // if(!user)
-        // {
-        //     return res.status(404).send('User not found');
-        // }
-        await req.user.remove();//using the remove function that is provided by the mongoose
+        await req.user.remove();
         sendAccountDeleteMail(req.user.email,req.user.name);
         res.send(req.user)
         
@@ -152,7 +114,7 @@ const upload=multer({
     limits:{
         fileSize:1000000
     },
-    fileFilter(req,file,cb)//file is the file we are using ,cb is the callback function
+    fileFilter(req,file,cb)
     {
         if(!file.originalname.match(/\.(jpeg|jpg|png)$/))
         {
