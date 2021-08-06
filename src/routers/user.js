@@ -25,7 +25,6 @@ router.post('/users',async (req,res)=>{
     
 })
 
-
 router.post('/users/login',async (req,res)=>{
     try {
         const user=await User.findByCredentials(req.body.email,req.body.password);
@@ -82,7 +81,6 @@ router.patch('/users/me',auth,async (req,res)=>{
         return res.status(400).send({error:'Invalid Updates'});
 
     try{
-
         updates.forEach((update)=>{
             req.user[update]=req.body[update]
         });
@@ -157,5 +155,6 @@ router.delete('/users/me/avatar',auth,async(req,res)=>{
 },(error,req,res,next)=>{
     res.status(400).send({error});
 })
+
 
 module.exports=router;
